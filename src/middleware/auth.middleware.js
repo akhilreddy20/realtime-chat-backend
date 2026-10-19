@@ -1,33 +1,14 @@
-import jwt from "jsonwebtoken"
-import User from "../models/user.model.js"
+import mongoose from 'mongoose';
+import { tokenFromRequest, verifyToken } from '../lib/auth.js';
+import { User } from '../models/user.model.js';
+import { unauthorized } from '../lib/errors.js';
 
-
-export const protectRoute = async (req,res,next)=>{
-    try {
-        const token =req.cookies.jwt
-
-        if (!token){
-            return res.status(401).json({message:"Unauthorized -No Token Provided"});
-        }
-
-        const decoded =jwt.verify(token,process.env.JWT_SECRET)
-
-        if (!decoded){
-            return res.status(401).json({message:"Unauthorized - Invaild token"});
-        }
-
-        const user = await User.findById(decoded.userId).select("-password");
-
-        if(!user){
-            return res.status(404).json({message:"User not found"});
-        }
-
-        req.user = user
-
-        next()
-
-    } catch (error){
-        console.log("Error in protectRoute controller: ",error.message);
-        res.status(500).json({message:"Internal server Error"});
-    }
-}
+/** Requires a valid session; sets req.user. Invalid/expired tokens are 401, not 500. */
+export const protectRoute = async (req, res, next) => {
+  const userId = verifyToken(tokenFromRequest(req));
+  if (!userId || !mongoose.isValidObjectId(userId)) throw unauthorized();
+  const user = await User.findById(userId);
+  if (!user) throw unauthorized();
+  req.user = user;
+  next();
+};

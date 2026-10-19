@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Realtime Chat</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%232563eb%27/%3E%3Cpath d=%27M8 10h16v10H14l-6 4z%27 fill=%27white%27/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <!-- Auth -->
+  <main id="auth-view" class="auth" hidden>
+    <form id="auth-form" class="card" novalidate>
+      <h1>Realtime Chat</h1>
+      <p class="muted" id="auth-subtitle">Sign in to continue</p>
+      <label id="name-field" hidden>Full name
+        <input name="fullName" autocomplete="name" maxlength="60" />
+      </label>
+      <label>Email
+        <input name="email" type="email" autocomplete="email" required />
+      </label>
+      <label>Password
+        <input name="password" type="password" autocomplete="current-password" minlength="8" required />
+      </label>
+      <p class="error" id="auth-error" role="alert"></p>
+      <button type="submit" id="auth-submit">Sign in</button>
+      <p class="muted small">
+        <span id="auth-switch-text">No account?</span>
+        <button type="button" class="link" id="auth-switch">Create one</button>
+      </p>
+    </form>
+  </main>
+
+  <!-- Chat -->
+  <main id="chat-view" class="chat" hidden>
+    <aside class="sidebar">
+      <header class="me">
+        <div class="avatar" id="me-avatar"></div>
+        <div class="grow">
+          <div id="me-name" class="name"></div>
+          <div class="muted small" id="conn-status">connecting…</div>
+        </div>
+        <button class="ghost" id="logout" title="Log out">Log out</button>
+      </header>
+      <input id="search" class="search" placeholder="Search people" aria-label="Search people" />
+      <ul id="contacts" class="contacts" aria-label="Contacts"></ul>
+    </aside>
+
+    <section class="conversation" id="conversation">
+      <div class="empty" id="empty-state">Select someone to start chatting</div>
+      <header class="conv-header" id="conv-header" hidden>
+        <button class="ghost back" id="back" aria-label="Back to contacts">←</button>
+        <div class="avatar" id="peer-avatar"></div>
+        <div>
+          <div class="name" id="peer-name"></div>
+          <div class="muted small" id="peer-status"></div>
+        </div>
+      </header>
+      <div class="messages" id="messages" aria-live="polite" hidden>
+        <button class="ghost load-older" id="load-older" hidden>Load older messages</button>
+        <ol id="message-list"></ol>
+      </div>
+      <form class="composer" id="composer" hidden>
+        <input id="composer-input" placeholder="Type a message" autocomplete="off" maxlength="2000" aria-label="Message" />
+        <button type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

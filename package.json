@@ -1,14 +1,16 @@
 {
-  "name": "backend",
+  "name": "realtime-chat",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Real-time 1:1 chat: Express 5, Socket.IO, MongoDB, JWT cookies; idempotent sends, read receipts, presence, typing",
+  "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "NODE_ENV=test node --test --test-concurrency=1"
   },
   "keywords": [],
   "author": "",
-  "type":"module",
+  "type": "module",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -23,5 +25,8 @@
   "devDependencies": {
     "nodeman": "^1.1.2",
     "nodemon": "^3.1.11"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
