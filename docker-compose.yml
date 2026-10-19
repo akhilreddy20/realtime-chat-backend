@@ -1,0 +1,15 @@
+# Local stack: MongoDB + chat server.  Usage: docker compose up --build  ->  http://localhost:5001
+services:
+  mongo:
+    image: mongo:7
+    volumes: [mongo-data:/data/db]
+  app:
+    build: .
+    ports: ["5001:5001"]
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/chat
+      JWT_SECRET: ${JWT_SECRET:-dev-only-secret}
+      NODE_ENV: development
+    depends_on: [mongo]
+volumes:
+  mongo-data:
